@@ -1,6 +1,19 @@
-# Session 1 — Oct 21, 6:35 PM
+# Session 1 — Nov 15, 6:35 PM
 Goal: Understand project & create initial structure
 
 I spent this session rereading the PDF carefully. The project is similar to the first one (Driver + Logger + Encryptor), but more complex since it requires multiple independent interactions using only semaphores. I decided to keep the project in one Python file (bank.py) but organize the code differently than before.
 
 Created the GitHub repo, added the Devlog, and made the basic file with constants and imports.
+
+# Session 2 - Nov 15, 6:50 PM
+After reviewing the project description again, I now understand how the tellers, customers, and manager need to synchronize using semaphores. The structure is becoming clearer: I need global semaphores for capacity control, shared queues for the line, and per-customer semaphores for handshakes.
+
+Plan for this session:
+
+Define all semaphores required by the project.
+
+Create shared data structures that will hold customer state.
+
+Set up the basic global variables that will be used across threads.
+
+Commit the devlog before coding, then commit the code after finishing.
