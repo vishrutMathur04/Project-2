@@ -74,7 +74,18 @@ def customer_thread(cid):
     out("Customer", cid, msg="entering lobby")
     lobby_limit.acquire()    # capacity limit
 
-    # queueing logic added later
+def customer_thread(cid):
+    arrival_gate.acquire()
+    lobby_limit.acquire()
+
+    state_lock.acquire()
+    customer_line.append(cid)
+    out("Customer", cid, msg="queued")
+    queue_ready.release()
+    state_lock.release()
+
+
+
 
 
     

@@ -57,3 +57,17 @@ Make customers wait on arrival_gate
 
 After release, allow customers to attempt entering the lobby 
 
+# Session 6 - Nov 16, 3:50 PM
+
+Customers need to enter a shared queue so tellers can pull from it later.
+
+Plan for this session:
+
+Implement queue insertion under a protected critical section
+
+Signal tellers via a semaphore that a new customer is ready
+
+Commit appropriately
+
+
+
