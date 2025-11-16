@@ -33,7 +33,7 @@ Commit both devlog and code.
 
 # Session 4 - Nov 16, 1:47 PM
 
-Thoughts so far:
+
 
 The next requirement is that all tellers must announce readiness before any customer can proceed. This means I need a shared counter protected by a lock and a semaphore to release customers once the bank is open.
 
@@ -46,3 +46,14 @@ Update the shared counter safely.
 Allow the last teller to release all waiting customers.
 
 Commit devlog and code.
+
+# Session 5 - Nov 16, 3:24 PM
+
+Now that tellers announce readiness and open the bank, the next step is customer arrival. Customers must wait for the bank to open before entering the lobby.
+
+Plan for this session:
+
+Make customers wait on arrival_gate
+
+After release, allow customers to attempt entering the lobby 
+

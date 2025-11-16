@@ -66,6 +66,17 @@ def teller_thread(tid):
         for _ in range(NUM_CUSTOMERS):
             arrival_gate.release()
 
+def customer_thread(cid):
+    out("Customer", cid, msg="waiting for bank to open")
+
+    arrival_gate.acquire()   # wait for tellers to finish startup
+
+    out("Customer", cid, msg="entering lobby")
+    lobby_limit.acquire()    # capacity limit
+
+    # queueing logic added later
+
+
     
 
 
