@@ -69,5 +69,16 @@ Signal tellers via a semaphore that a new customer is ready
 
 Commit appropriately
 
+# Session 6 - Nov 16, 4:45 PM
+
+The teller must block until a customer is ready in the queue.
+
+Plan for this session:
+
+Implement teller waiting on queue_ready
+
+Pull customer ID safely
+
+Commit before/after coding
 
 

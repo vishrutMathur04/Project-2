@@ -84,6 +84,26 @@ def customer_thread(cid):
     queue_ready.release()
     state_lock.release()
 
+def teller_thread(tid):
+
+    # existing startup code...
+
+    while True:
+        queue_ready.acquire()
+
+        state_lock.acquire()
+        if not customer_line:
+            state_lock.release()
+            continue
+        cid = customer_line.popleft()
+        state_lock.release()
+
+        out("Teller", tid, "Customer", cid, "calling customer")
+        assigned_customer[cid] = tid
+
+        # next: handshake asking for transaction type
+
+
 
 
 
