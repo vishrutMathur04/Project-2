@@ -103,7 +103,25 @@ def teller_thread(tid):
 
         # next: handshake asking for transaction type
 
+def teller_thread(tid):
 
+    # after retrieving cid...
+
+    out("Teller", tid, "Customer", cid, "requesting transaction type")
+    ask_type[cid].release()     # ask customer
+
+    recv_type[cid].acquire()    # wait for response
+    choice = transaction_choice[cid]
+    out("Teller", tid, "Customer", cid, f"received {choice}")
+
+
+def customer_thread(cid):
+    ask_type[cid].acquire()
+    out("Customer", cid, msg="choosing transaction")
+
+    # default choice for now (“deposit”)
+    transaction_choice[cid] = "deposit"
+    recv_type[cid].release()
 
 
 
