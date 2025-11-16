@@ -17,3 +17,16 @@ Create shared data structures that will hold customer state.
 Set up the basic global variables that will be used across threads.
 
 Commit the devlog before coding, then commit the code after finishing.
+
+# Session 3 - Nov 16, 1:30 PM
+The overall flow of the program is beginning to make sense: tellers must all report ready before customers begin. Since prints must follow a specific format, adding a helper function now will keep the rest consistent.
+
+Plan for this session:
+
+Add the formatted output function.
+
+Create empty teller and customer thread functions.
+
+Get the structural foundation ready for later functionality.
+
+Commit both devlog and code.

@@ -35,3 +35,20 @@ customers_done = 0
 
 # Lock for modifying shared state
 state_lock = threading.Semaphore(1)
+
+def out(role, rid, partner_role="", partner_id=None, msg=""):
+    if partner_role:
+        print(f"{role} {rid} [{partner_role} {partner_id}]: {msg}")
+    else:
+        print(f"{role} {rid} []: {msg}")
+
+
+def teller_thread(tid):
+    out("Teller", tid, msg="initialized")
+    # Detailed operations added later
+
+
+def customer_thread(cid):
+    out("Customer", cid, msg="started")
+    # Detailed operations added later
+
