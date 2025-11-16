@@ -81,7 +81,7 @@ Pull customer ID safely
 
 Commit before/after coding
 
-# Session 8 - Nov 16, 4:45 PM
+# Session 8 - Nov 16, 5:00 PM
 The teller must ask what transaction the customer wants, and the customer must reply through dedicated semaphores.
 
 Plan for this session:
@@ -91,5 +91,19 @@ Add per-customer semaphores for ask/response
 Teller triggers ask → customer responds
 
 Commit devlog and code
+
+# Session 9 - Nov 16, 5:11 PM
+
+Withdrawals require manager approval, so both teller and customer behavior must branch depending on the transaction type.
+
+Plan for this session:
+
+Implement conditional branch for withdrawals
+
+Add manager semaphore usage
+
+Add printed messages
+
+Commit code after completion
 
 

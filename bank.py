@@ -123,6 +123,15 @@ def customer_thread(cid):
     transaction_choice[cid] = "deposit"
     recv_type[cid].release()
 
+def teller_thread(tid):
+    # after receiving choice...
+    if choice == "withdraw":
+        manager_access.acquire()
+        out("Teller", tid, "Manager", 0, "processing withdrawal")
+        manager_access.release()
+    else:
+        out("Teller", tid, msg="processing deposit")
+
 
 
 
