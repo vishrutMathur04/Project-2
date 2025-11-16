@@ -52,3 +52,20 @@ def customer_thread(cid):
     out("Customer", cid, msg="started")
     # Detailed operations added later
 
+def teller_thread(tid):
+    global tellers_ready
+
+    out("Teller", tid, msg="ready")
+
+    state_lock.acquire()
+    tellers_ready += 1
+    last_one = (tellers_ready == NUM_TELLERS)
+    state_lock.release()
+
+    if last_one:
+        for _ in range(NUM_CUSTOMERS):
+            arrival_gate.release()
+
+    
+
+

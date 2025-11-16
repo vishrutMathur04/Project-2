@@ -30,3 +30,19 @@ Create empty teller and customer thread functions.
 Get the structural foundation ready for later functionality.
 
 Commit both devlog and code.
+
+# Session 4 - Nov 16, 1:47 PM
+
+Thoughts so far:
+
+The next requirement is that all tellers must announce readiness before any customer can proceed. This means I need a shared counter protected by a lock and a semaphore to release customers once the bank is open.
+
+Plan for this session:
+
+Implement teller startup announcements.
+
+Update the shared counter safely.
+
+Allow the last teller to release all waiting customers.
+
+Commit devlog and code.
