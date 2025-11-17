@@ -106,4 +106,15 @@ Add printed messages
 
 Commit code after completion
 
+# Session 10 - Nov 16, 6:00 PM
+
+After completing the transaction, tellers must notify customers that they are finished.
+
+Plan for this session:
+
+Add “finished” signal from teller
+
+Customer waits on finish signal
+
+Commit after coding
 

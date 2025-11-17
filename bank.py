@@ -132,6 +132,14 @@ def teller_thread(tid):
     else:
         out("Teller", tid, msg="processing deposit")
 
+def teller_thread(tid):
+    # after processing...
+    finish_signal[cid].release()
+    out("Teller", tid, "Customer", cid, "transaction complete")
+
+def customer_thread(cid):
+    finish_signal[cid].acquire()
+    out("Customer", cid, msg="transaction finished")
 
 
 
