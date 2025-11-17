@@ -179,3 +179,6 @@ Ensure no deadlocks
 
 Minor fixes
 
+# Session 16 - Nov 16, 8:46
+
+Reviewed further changes and now the overall code looks good, also updated some functions and removed some overlapping functions. Now the working tree also looks clean.
