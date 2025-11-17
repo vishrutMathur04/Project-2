@@ -182,3 +182,102 @@ Minor fixes
 # Session 16 - Nov 16, 8:46
 
 Reviewed further changes and now the overall code looks good, also updated some functions and removed some overlapping functions. Now the working tree also looks clean.
+
+# Session 17 - Nov 16, 9:00 PM
+
+Just tried my first test  and its giving correct output.
+I kept NUM_TELLERS = 3
+NUM_CUSTOMERS = 5, and got this output 
+Teller 0 []: ready
+Teller 1 []: ready
+Teller 2 []: ready
+Customer 0 []: waiting for bank to open
+Customer 0 []: entering lobby
+Customer 0 []: queued
+Teller 0 [Customer 0]: calling customer
+Teller 0 [Customer 0]: requesting transaction type
+Customer 0 []: choosing transaction
+Customer 0 [Teller 0]: tells transaction: deposit
+Teller 0 [Customer 0]: received deposit
+Teller 0 []: processing deposit
+Teller 0 []: going to safe
+Teller 0 [Safe ]: using safe
+Customer 1 []: waiting for bank to open
+Customer 1 []: entering lobby
+Customer 1 []: queued
+Teller 1 [Customer 1]: calling customer
+Teller 1 [Customer 1]: requesting transaction type
+Customer 1 []: choosing transaction
+Customer 1 [Teller 1]: tells transaction: withdraw
+Teller 1 [Customer 1]: received withdraw
+Teller 1 [Manager 0]: going to manager
+Teller 1 [Manager 0]: using manager
+Customer 2 []: waiting for bank to open
+Customer 2 []: entering lobby
+Customer 3 []: waiting for bank to open
+Customer 3 []: entering lobby
+Teller 0 [Safe ]: done with safe
+Teller 1 [Manager 0]: done with manager
+Teller 0 [Customer 0]: transaction complete
+Teller 1 []: going to safe
+Customer 0 []: transaction finished
+Teller 1 [Safe ]: using safe
+Customer 0 []: exiting the bank
+Customer 4 []: waiting for bank to open
+Customer 2 []: queued
+Customer 4 []: entering lobby
+Teller 2 [Customer 2]: calling customer
+Teller 2 [Customer 2]: requesting transaction type
+Customer 2 []: choosing transaction
+Customer 2 [Teller 2]: tells transaction: withdraw
+Teller 2 [Customer 2]: received withdraw
+Teller 2 [Manager 0]: going to manager
+Teller 2 [Manager 0]: using manager
+Teller 1 [Safe ]: done with safe
+Teller 2 [Manager 0]: done with manager
+Teller 2 []: going to safe
+Teller 1 [Customer 1]: transaction complete
+Teller 2 [Safe ]: using safe
+Customer 1 []: transaction finished
+Customer 1 []: exiting the bank
+Customer 3 []: queued
+Teller 0 [Customer 3]: calling customer
+Teller 0 [Customer 3]: requesting transaction type
+Customer 3 []: choosing transaction
+Customer 3 [Teller 0]: tells transaction: deposit
+Teller 0 [Customer 3]: received deposit
+Teller 0 []: processing deposit
+Teller 0 []: going to safe
+Teller 0 [Safe ]: using safe
+Teller 2 [Safe ]: done with safe
+Teller 2 [Customer 2]: transaction complete
+Customer 2 []: transaction finished
+Customer 2 []: exiting the bank
+Customer 4 []: queued
+Teller 1 [Customer 4]: calling customer
+Teller 1 [Customer 4]: requesting transaction type
+Customer 4 []: choosing transaction
+Customer 4 [Teller 1]: tells transaction: withdraw
+Teller 1 [Customer 4]: received withdraw
+Teller 1 [Manager 0]: going to manager
+Teller 1 [Manager 0]: using manager
+Teller 0 [Safe ]: done with safe
+Teller 0 [Customer 3]: transaction complete
+Customer 3 []: transaction finished
+Customer 3 []: exiting the bank
+Teller 1 [Manager 0]: done with manager
+Teller 1 []: going to safe
+Teller 1 [Safe ]: using safe
+Teller 1 [Safe ]: done with safe
+Teller 1 [Customer 4]: transaction complete
+Customer 4 []: transaction finished
+Customer 4 []: exiting the bank
+Teller 2 []: no more customers, exiting
+Teller 0 []: no more customers, exiting
+Teller 1 []: no more customers, exiting
+Bank closed for the day.
+
+This output seems correct, lets do more tests in next sessions.
+
+
+

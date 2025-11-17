@@ -6,7 +6,7 @@ import random
 from collections import deque
 
 NUM_TELLERS = 3
-NUM_CUSTOMERS = 50
+NUM_CUSTOMERS = 5
 
 # Concurrency controls
 lobby_limit = threading.Semaphore(2)      # at most 2 customers in lobby
