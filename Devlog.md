@@ -118,3 +118,15 @@ Customer waits on finish signal
 
 Commit after coding
 
+# Session 11 - Nov 16, 6:05 PM
+
+Customers need a clean exit path from the bank after receiving the finished signal. They must release the lobby capacity so new customers can enter.
+
+Plan for this session:
+
+Implement customer exit behavior
+
+Release lobby semaphore on exit
+
+Commit devlog and code
+

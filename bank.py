@@ -141,6 +141,15 @@ def customer_thread(cid):
     finish_signal[cid].acquire()
     out("Customer", cid, msg="transaction finished")
 
+def customer_thread(cid):
+    # ... previous code ...
+
+    finish_signal[cid].acquire()  
+    out("Customer", cid, msg="exiting the bank")
+
+    lobby_limit.release()    # free lobby space
+
+
 
 
     
