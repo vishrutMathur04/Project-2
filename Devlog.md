@@ -284,6 +284,11 @@ This output seems correct, lets do more tests in next sessions.
 Ran another test amd changed the NUM_CUSTOMERS to 15
 Its basically a randomized stress test and I am testing it between 10–20 customers.
 
+# Session 19 - Nov 16, 9:50 PM
+
+Ran one more test in a high stress case where I put the NUM_CUSTOMERS to 50...It gave correct output.
+
+
 
 
 
