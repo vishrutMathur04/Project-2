@@ -130,3 +130,13 @@ Release lobby semaphore on exit
 
 Commit devlog and code
 
+# Session 12 - Nov 16, 6:25 PM
+At this stage, tellers continue looping indefinitely. They must stop after all customers complete transactions.
+
+Plan for this session:
+
+Add a counter tracking processed customers
+
+Add teller termination condition
+
+

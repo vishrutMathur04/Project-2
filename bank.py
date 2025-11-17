@@ -149,6 +149,30 @@ def customer_thread(cid):
 
     lobby_limit.release()    # free lobby space
 
+def teller_thread(tid):
+    global processed_count
+
+    while True:
+        queue_ready.acquire()
+
+        state_lock.acquire()
+        if processed_count == NUM_CUSTOMERS:
+            state_lock.release()
+            break
+        if not customer_line:
+            state_lock.release()
+            continue
+
+        cid = customer_line.popleft()
+        state_lock.release()
+
+        # ... service logic ...
+
+        state_lock.acquire()
+        processed_count += 1
+        state_lock.release()
+
+
 
 
 
