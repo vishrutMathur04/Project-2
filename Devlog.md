@@ -279,5 +279,12 @@ Bank closed for the day.
 
 This output seems correct, lets do more tests in next sessions.
 
+# Session 18 - Nov 16, 9:30 PM
+
+Ran another test amd changed the NUM_CUSTOMERS to 15
+Its basically a randomized stress test and I am testing it between 10–20 customers.
+
+
+
 
 
