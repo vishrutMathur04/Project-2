@@ -288,6 +288,10 @@ Its basically a randomized stress test and I am testing it between 10–20 custo
 
 Ran one more test in a high stress case where I put the NUM_CUSTOMERS to 50...It gave correct output.
 
+# Session 20 - Nov 16, 11:00 PM
+I just compared my output with the output posted at E-learning and the words of output is not the same or slightly different so I will make those same like before I had Teller 0 [Customer 3]: choosing a teller. and now I am making it same as professor's example as selecting a teller.
+
+
 
 
 

@@ -6,7 +6,7 @@ import random
 from collections import deque
 
 NUM_TELLERS = 3
-NUM_CUSTOMERS = 50
+NUM_CUSTOMERS = 25
 
 # Concurrency controls
 lobby_limit = threading.Semaphore(2)      # at most 2 customers in lobby
@@ -33,39 +33,101 @@ processed_count = 0
 state_lock = threading.Semaphore(1)       # mutex for shared state
 
 
-def out(role, rid, partner_role="", partner_id=None, msg=""):
-    """Consistent formatted output for logs."""
-    if partner_role:
-        print(f"{role} {rid} [{partner_role} {partner_id}]: {msg}")
-    else:
-        print(f"{role} {rid} []: {msg}")
+# --- helper print functions using exact professor wording ---
+def p_teller_ready(tid):
+    print(f"Teller {tid} []: ready to serve")
+    print(f"Teller {tid} []: waiting for a customer")
 
 
+def p_customer_want(cid, choice_word):
+    # "Customer 0 []: wants to perform a deposit transaction"
+    print(f"Customer {cid} []: wants to perform a {choice_word} transaction")
+
+
+def p_customer_go_to_bank(cid):
+    print(f"Customer {cid} []: going to bank.")
+    print(f"Customer {cid} []: entering bank.")
+    print(f"Customer {cid} []: getting in line.")
+    print(f"Customer {cid} []: selecting a teller.")
+
+
+def p_customer_selects(cid, tid):
+    print(f"Customer {cid} [Teller {tid}]: selects teller")
+    print(f"Customer {cid} [Teller {tid}] introduces itself")
+
+
+def p_teller_calling(tid, cid):
+    print(f"Teller {tid} [Customer {cid}]: serving a customer")
+    print(f"Teller {tid} [Customer {cid}]: asks for transaction")
+
+
+def p_customer_asks_transaction(cid, tid, kind):
+    # "Customer 22 [Teller 1]: asks for withdrawal transaction"
+    print(f"Customer {cid} [Teller {tid}]: asks for {kind} transaction")
+
+
+def p_teller_handling(tid, cid, kind):
+    print(f"Teller {tid} [Customer {cid}]: handling {kind} transaction")
+
+
+def p_teller_manager_start(tid, cid):
+    print(f"Teller {tid} [Customer {cid}]: going to the manager")
+    print(f"Teller {tid} [Customer {cid}]: getting manager's permission")
+
+
+def p_teller_manager_granted(tid, cid):
+    print(f"Teller {tid} [Customer {cid}]: got manager's permission")
+
+
+def p_teller_go_safe(tid, cid):
+    print(f"Teller {tid} [Customer {cid}]: going to safe")
+    print(f"Teller {tid} [Customer {cid}]: enter safe")
+
+
+def p_teller_leave_safe(tid, cid, kind):
+    # "leaving safe" then "finishes deposit/withdrawal transaction."
+    print(f"Teller {tid} [Customer {cid}]: leaving safe")
+    print(f"Teller {tid} [Customer {cid}]: finishes {kind} transaction.")
+    print(f"Teller {tid} [Customer {cid}]: wait for customer to leave.")
+
+
+def p_customer_leaves(cid):
+    print(f"Customer {cid} [Teller {assigned_customer.get(cid,'')}] leaves teller")
+    print(f"Customer {cid} []: goes to door")
+    print(f"Customer {cid} []: leaves the bank")
+
+
+def p_teller_done_for_day(tid):
+    print(f"Teller {tid} []: leaving for the day")
+
+
+# --- worker threads ---
 def teller_thread(tid):
     global tellers_ready, processed_count
 
-    # Teller startup
-    out("Teller", tid, msg="ready")
+    # Teller startup phrasing: ready to serve + waiting for a customer
     state_lock.acquire()
     tellers_ready += 1
     is_last = (tellers_ready == NUM_TELLERS)
     state_lock.release()
+
+    # Print the ready/waiting lines (professor style)
+    p_teller_ready(tid)
 
     # Last teller opens the bank for all customers
     if is_last:
         for _ in range(NUM_CUSTOMERS):
             arrival_gate.release()
 
-    # Main service loop
+    # Main loop: service customers until all processed
     while True:
-        queue_ready.acquire()   # wait for a customer to be queued or wakeup to exit
+        queue_ready.acquire()
 
-        # If everyone processed and no customers queued, exit
+        # termination check
         state_lock.acquire()
         if processed_count >= NUM_CUSTOMERS and not customer_line:
             state_lock.release()
             break
-        # If no customer now, continue
         if not customer_line:
             state_lock.release()
             continue
@@ -73,82 +135,98 @@ def teller_thread(tid):
         assigned_customer[cid] = tid
         state_lock.release()
 
-        out("Teller", tid, "Customer", cid, "calling customer")
-        out("Teller", tid, "Customer", cid, "requesting transaction type")
+        # Print selection/intro from customer side (professor sample prints these around selection)
+        p_customer_selects(cid, tid)
 
-        # Ask for transaction type
+        # Teller calls and asks for transaction
+        p_teller_calling(tid, cid)
+
+        # Ask the customer to state transaction
         ask_type[cid].release()
 
-        # Wait for customer response
+        # Wait for customer to respond
         recv_type[cid].acquire()
-        choice = transaction_choice.get(cid, "deposit")
-        out("Teller", tid, "Customer", cid, f"received {choice}")
+        kind = transaction_choice.get(cid, "deposit")  # 'deposit' or 'withdraw'
+        # Teller prints handling
+        p_teller_handling(tid, cid, kind)
 
-        # If withdraw, talk to manager
-        if choice == "withdraw":
-            out("Teller", tid, "Manager", 0, "going to manager")
+        # If withdraw -> manager
+        if kind == "withdraw":
+            p_teller_manager_start(tid, cid)
             manager_access.acquire()
-            out("Teller", tid, "Manager", 0, "using manager")
+            # granted
+            p_teller_manager_granted(tid, cid)
+            # small simulated manager time
             time.sleep(random.randint(5, 30) / 1000.0)
-            out("Teller", tid, "Manager", 0, "done with manager")
             manager_access.release()
-        else:
-            out("Teller", tid, msg="processing deposit")
 
-        # Use safe (vault)
-        out("Teller", tid, msg="going to safe")
+        # After manager (if any), go to safe
+        p_teller_go_safe(tid, cid)
         vault_access.acquire()
-        out("Teller", tid, "Safe", "", "using safe")
+        # simulate using safe
         time.sleep(random.randint(10, 50) / 1000.0)
-        out("Teller", tid, "Safe", "", "done with safe")
         vault_access.release()
+        # leaving safe and finishing
+        p_teller_leave_safe(tid, cid, "withdrawal" if kind == "withdraw" else "deposit")
 
-        # Complete transaction, signal customer
-        out("Teller", tid, "Customer", cid, "transaction complete")
+        # signal customer that transaction finished
         finish_signal[cid].release()
 
-        # Wait a tiny bit (simulate finalization) then count
-        time.sleep(0)  # yield
-
+        # let the customer leave and then increment processed_count
+        # small yield to allow customer to print leaves
+        time.sleep(0)
         state_lock.acquire()
         processed_count += 1
         state_lock.release()
 
-    out("Teller", tid, msg="no more customers, exiting")
+    # Teller leaving for the day
+    p_teller_done_for_day(tid)
 
 
 def customer_thread(cid):
-    # Start: wait until the bank opens
-    out("Customer", cid, msg="waiting for bank to open")
-    arrival_gate.acquire()
-
-    # Try to enter the lobby (max 2)
-    out("Customer", cid, msg="entering lobby")
-    lobby_limit.acquire()
-
-    # Join the queue
-    state_lock.acquire()
-    customer_line.append(cid)
-    out("Customer", cid, msg="queued")
-    queue_ready.release()
-    state_lock.release()
-
-    # Wait until teller asks for transaction type
-    ask_type[cid].acquire()
-    out("Customer", cid, msg="choosing transaction")
-
-    # Choose transaction (random)
+    # Decide upfront what this customer wants (so we can print initial wants block)
     choice = random.choice(["deposit", "withdraw"])
     transaction_choice[cid] = choice
-    out("Customer", cid, f"Teller", assigned_customer.get(cid, ""), f"tells transaction: {choice}")
+    # initial professor-style desire line
+    p_customer_want(cid, "deposit" if choice == "deposit" else "withdrawal")
+
+    # Wait for bank to open
+    arrival_gate.acquire()
+
+    # Now perform entering sequence
+    p_customer_go_to_bank(cid)
+
+    # Enter lobby (capacity)
+    lobby_limit.acquire()
+
+    # Join queue
+    state_lock.acquire()
+    customer_line.append(cid)
+    state_lock.release()
+
+    # signal a teller that someone is waiting
+    queue_ready.release()
+
+    # Wait for teller to ask for transaction
+    ask_type[cid].acquire()
+
+    # When teller asked, customer prints the "asks for ..." message (professor style)
+    # Determine kind word for phrasing
+    kind_word = "deposit" if transaction_choice[cid] == "deposit" else "withdrawal"
+    # Find assigned teller (may already be set by teller)
+    tid = assigned_customer.get(cid, 0)
+    p_customer_asks_transaction(cid, tid, kind_word)
+
+    # Respond
     recv_type[cid].release()
 
-    # Wait for teller to finish the transaction
+    # Wait for teller to complete and signal finish
     finish_signal[cid].acquire()
-    out("Customer", cid, msg="transaction finished")
 
-    # Leave lobby and free spot
-    out("Customer", cid, msg="exiting the bank")
+    # Customer leaves teller and bank (professor style)
+    p_customer_leaves(cid)
+
+    # free lobby spot
     lobby_limit.release()
 
 
@@ -166,11 +244,16 @@ def main():
     for t in tellers:
         t.start()
 
-    # Start customers
-    customers = [threading.Thread(target=customer_thread, args=(c,)) for c in range(NUM_CUSTOMERS)]
-    for c in customers:
-        c.start()
-        time.sleep(0.001)  # small stagger to avoid extreme contention
+    # Start customers (correctly, using range and explicit list)
+    customers = []
+    for cid in range(NUM_CUSTOMERS):
+        t = threading.Thread(target=customer_thread, args=(cid,))
+        customers.append(t)
+
+    for t in customers:
+        t.start()
+        # small stagger to avoid extreme contention (keeps output readable)
+        time.sleep(0.001)
 
     # Wait for customers to finish
     for c in customers:
