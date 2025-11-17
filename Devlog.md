@@ -152,6 +152,30 @@ Create tellers and customers
 
 Join threads
 
-Commit changes
 
+# Session 14 - Nov 16, 6:50 PM
+The program works structurally, but the prints need slight polishing to better follow the required format.
+
+Plan for this session:
+
+Review all out() calls
+
+Ensure consistent transaction messages
+
+Add missing logs for teller processing
+
+Commit updates
+
+
+# Session 15 - Nov 16, 8:20 PM
+
+Before testing, the internal logic should be checked one more time for potential race conditions.
+
+Plan for this session:
+
+Verify that all semaphores have matching acquire/release
+
+Ensure no deadlocks
+
+Minor fixes
 
