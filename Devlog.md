@@ -139,4 +139,19 @@ Add a counter tracking processed customers
 
 Add teller termination condition
 
+# Session 13 - Nov 16, 6:40 PM
+All behavior inside the threads is implemented, but the main function still needs to initialize semaphores, structures, and start all threads.
+
+Plan for this session:
+
+Add main block
+
+Initialize all semaphores and dicts
+
+Create tellers and customers
+
+Join threads
+
+Commit changes
+
 

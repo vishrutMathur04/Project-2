@@ -172,6 +172,24 @@ def teller_thread(tid):
         processed_count += 1
         state_lock.release()
 
+def main():
+    for cid in range(NUM_CUSTOMERS):
+        ask_type[cid] = threading.Semaphore(0)
+        recv_type[cid] = threading.Semaphore(0)
+        finish_signal[cid] = threading.Semaphore(0)
+
+    tellers = [threading.Thread(target=teller_thread, args=(t,)) 
+               for t in range(NUM_TELLERS)]
+    customers = [threading.Thread(target=customer_thread, args=(c,))
+                 for c in range(NUM_CUSTOMERS)]
+
+    for t in tellers: t.start()
+    for c in customers: c.start()
+
+    for c in customers: c.join()
+    for t in tellers: t.join()
+
+    print("Bank closed for the day.")
 
 
 
